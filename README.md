@@ -44,13 +44,25 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Create a `.env` file in the root directory with your database credentials:
-```env
-DB_HOST=localhost
-DB_USER=your_username
-DB_PASSWORD=your_password
-DB_NAME=your_database_name
-```
+4. Set up environment variables:
+   - Copy `.env.example` to `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Edit `.env` with your actual database credentials:
+     ```env
+     # Database Configuration
+     DB_HOST=localhost
+     DB_USER=your_username
+     DB_PASSWORD=your_password
+     DB_NAME=todo_db
+
+     # Application Settings
+     APP_PORT=8000
+     APP_HOST=0.0.0.0
+     ```
+   - Make sure to replace the placeholder values with your actual database credentials
+   - Never commit the `.env` file to version control
 
 5. Create the required database tables:
 ```sql
@@ -102,7 +114,8 @@ http://localhost:8000
 todoAPI/
 ├── main.py              # FastAPI application
 ├── requirements.txt     # Python dependencies
-├── .env                # Environment variables
+├── .env.example        # Example environment variables
+├── .env                # Environment variables (not in git)
 ├── static/
 │   └── css/
 │       ├── style.css   # Main styles
@@ -111,6 +124,24 @@ todoAPI/
     ├── index.html      # Todo list page
     └── login.html      # Login page
 ```
+
+## Environment Variables
+
+The application uses the following environment variables (configured in `.env`):
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| DB_HOST | Database host | localhost |
+| DB_USER | Database username | - |
+| DB_PASSWORD | Database password | - |
+| DB_NAME | Database name | todo_db |
+| APP_PORT | Application port | 8000 |
+| APP_HOST | Application host | 0.0.0.0 |
+
+To set up your environment:
+1. Copy `.env.example` to `.env`
+2. Update the values in `.env` with your actual configuration
+3. Never commit `.env` to version control
 
 ## Features in Detail
 
