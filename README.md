@@ -29,7 +29,7 @@ A modern, user-friendly Todo application built with FastAPI and MySQL. This appl
 
 1. Clone the repository:
 ```bash
-git clone <your-repository-url>
+git clone http://github.com/ParsasohiCode/todoAPI
 cd todoAPI
 ```
 
