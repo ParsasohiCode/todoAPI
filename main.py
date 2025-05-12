@@ -54,6 +54,22 @@ async def login(request: Request , username: str = Form(...), password: str = Fo
                 return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
     except mysql.connector.Error as err:
         return await handle_db_error(request, err)
+    
+@app.get("/register", response_class=HTMLResponse)
+async def register(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+@app.post("/register", response_class=HTMLResponse)
+async def register(request: Request, username: str = Form(...), password: str = Form(...)):
+    try:
+        with get_db_connection() as mydb:
+            mycursor = mydb.cursor(dictionary=True)
+            sql = "INSERT INTO users (username, password) VALUES (%s, %s)"
+            mycursor.execute(sql, (username, password))
+            mydb.commit()
+            return RedirectResponse(url="/login", status_code=303)
+    except mysql.connector.Error as err:
+        return await handle_db_error(request, err)
 
 @app.get("/listtodos", response_class=HTMLResponse)
 async def list_todos(request: Request):
@@ -111,8 +127,3 @@ async def logout():
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
-
-
-
-
