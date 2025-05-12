@@ -55,8 +55,8 @@ async def login(request: Request , username: str = Form(...), password: str = Fo
     except mysql.connector.Error as err:
         return await handle_db_error(request, err)
     
-@app.get("/register", response_class=HTMLResponse)
-async def register(request: Request):
+@app.get("/registerpage", response_class=HTMLResponse)
+async def registerpage(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
 
 @app.post("/register", response_class=HTMLResponse)
@@ -67,7 +67,7 @@ async def register(request: Request, username: str = Form(...), password: str = 
             sql = "INSERT INTO users (username, password) VALUES (%s, %s)"
             mycursor.execute(sql, (username, password))
             mydb.commit()
-            return RedirectResponse(url="/login", status_code=303)
+            return RedirectResponse(url="/", status_code=303)
     except mysql.connector.Error as err:
         return await handle_db_error(request, err)
 
