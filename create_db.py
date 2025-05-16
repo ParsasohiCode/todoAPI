@@ -31,7 +31,8 @@ def create_database():
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
                 completed BOOLEAN DEFAULT FALSE,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_by VARCHAR(50) NOT NULL
             )
         """)
         
@@ -40,33 +41,10 @@ def create_database():
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(50) NOT NULL UNIQUE,
-                password_hash VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL,
                 last_login TIMESTAMP
             )
         """)
-        
-        # Insert sample data into todos
-        sample_todos = [
-            ('Buy groceries', False),
-            ('Finish project', True),
-            ('Call the bank', False)
-        ]
-        
-        cursor.executemany("""
-            INSERT INTO todos (title, completed) 
-            VALUES (%s, %s)
-        """, sample_todos)
-        
-        # Insert sample users
-        sample_users = [
-            ('testuser1', 'dummyhash1'),
-            ('testuser2', 'dummyhash2')
-        ]
-        
-        cursor.executemany("""
-            INSERT INTO users (username, password_hash) 
-            VALUES (%s, %s)
-        """, sample_users)
         
         # Commit the changes
         conn.commit()
