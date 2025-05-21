@@ -1,54 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Todo List</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Modern Todo App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
-    <div class="container">
-
-        <div class="header">
-            <div class="header-left">
-                <form action="/logout" method="POST" style="display: inline;">
-                    <button type="submit" class="logout-button">🚪 Logout</button>
-                </form>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-title">TaskFlow</h1>
+                <p class="app-subtitle">Organize your day</p>
             </div>
-            <h1 class="header-title">✨ Todo List</h1>
-            <div class="header-right">
-                <h3 class="username">{{ request.session["username"] }}</h3>
-            </div>
-        </div>
-        
-        {% if error %}
-        <div class="error">{{ error }}</div>
-        {% endif %}
-
-        <form class="add-todo-form" action="/addtodo" method="POST">
-            <input type="text" name="title" placeholder="What needs to be done?" required>
-            <button type="submit" class="add-button">Add Todo</button>
-        </form>
-
-        <div id="todoList">
-            {% for todo in todos %}
-            <div class="todo-item {% if todo.completed %}completed{% endif %}">
-                <div class="todo-content">
-                    <span class="todo-title">{{ todo.title }}</span>
-                    <span class="todo-date">{{ todo.created_at }}</span>
-                </div>
-                <div class="todo-actions">
-                    <form action="/updatetodo/{{ todo.id }}" method="POST" style="display: inline;">
-                        <button type="submit" class="update-button">
-                            {% if todo.completed %}↩️ Undo{% else %}✅ Complete{% endif %}
+            
+            <div class="user-section">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <span class="username">{{ request.session["username"] }}</span>
+                        <span class="user-status">Active</span>
+                    </div>
+                    <form action="/logout" method="POST" class="logout-form">
+                        <button type="submit" class="logout-button">
+                            <i class="fas fa-sign-out-alt"></i>
                         </button>
                     </form>
-                    <form action="/deletetodo/{{ todo.id }}" method="POST" style="display: inline;">
-                        <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this todo?')">🗑️ Delete</button>
-                    </form>
                 </div>
             </div>
-            {% endfor %}
-        </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <h3>Progress</h3>
+                    <span class="completed-count">{{ completed }}/{{ total }}</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ (completed / total * 100) if total > 0 else 0 }}%"></div>
+                </div>
+                <div class="progress-label">{{ "%.0f"|format((completed / total * 100) if total > 0 else 0) }}% Complete</div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h2>My Tasks</h2>
+                <form class="add-todo-form" action="/addtodo" method="POST">
+                    <div class="input-group">
+                        <input type="text" name="title" placeholder="Add a new task..." required>
+                        <button type="submit" class="add-button">
+                            <i class="fas fa-plus"></i>
+                            <span>Add Task</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            {% if error %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
+
+            <div class="todo-list" id="todoList">
+                {% for todo in todos %}
+                <div class="todo-item {% if todo.completed %}completed{% endif %}">
+                    <div class="todo-content">
+                        <div class="todo-status">
+                            <form action="/updatetodo/{{ todo.id }}" method="POST">
+                                <button type="submit" class="status-button">
+                                    {% if todo.completed %}
+                                    <i class="fas fa-check-circle"></i>
+                                    {% else %}
+                                    <i class="far fa-circle"></i>
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </div>
+                        <div class="todo-details">
+                            <span class="todo-title">{{ todo.title }}</span>
+                            <span class="todo-date">
+                                <i class="far fa-clock"></i>
+                                {{ todo.created_at.strftime('%b %d, %Y') if todo.created_at else '' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="todo-actions">
+                        <form action="/deletetodo/{{ todo.id }}" method="POST" class="delete-form">
+                            <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this task?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
     </div>
 </body>
 </html>

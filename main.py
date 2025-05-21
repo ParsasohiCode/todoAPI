@@ -86,9 +86,16 @@ async def list_todos(request: Request):
             mycursor = mydb.cursor(dictionary=True)
             mycursor.execute("SELECT * FROM todos WHERE created_by = %s", (username,))
             todos = mycursor.fetchall()
+            i = 0
+            for todo in todos:
+                if todo["completed"]:
+                    i+=1
+            total = len(todos)
             return templates.TemplateResponse("index.html", {
                 "request": request,
-                "todos": todos
+                "todos": todos,
+                "completed": i,
+                "total": total
             })
     except mysql.connector.Error as err:
         return await handle_db_error(request, err)
