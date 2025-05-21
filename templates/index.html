@@ -7,12 +7,17 @@
 </head>
 <body>
     <div class="container">
+
         <div class="header">
-            <form action="/logout" method="POST" style="display: inline;">
-                <button type="submit" class="logout-button">🚪 Logout</button>
-            </form>
-            <h1>✨ Todo List</h1>
-            <div style="width: 100px;"></div>
+            <div class="header-left">
+                <form action="/logout" method="POST" style="display: inline;">
+                    <button type="submit" class="logout-button">🚪 Logout</button>
+                </form>
+            </div>
+            <h1 class="header-title">✨ Todo List</h1>
+            <div class="header-right">
+                <h3 class="username">{{ request.session["username"] }}</h3>
+            </div>
         </div>
         
         {% if error %}

@@ -167,14 +167,34 @@ button:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
-    position: relative;
+    padding: 10px 0;
+    border-bottom: 2px solid #f0f0f0;
 }
 
-.header h1 {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+.header-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.header-title {
     margin: 0;
+    font-size: 24px;
+    color: #2d3436;
+    text-align: center;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.username {
+    margin: 0;
+    font-size: 16px;
+    color: #636e72;
+    font-weight: 500;
 }
 
 .logout-button {
